@@ -2,27 +2,31 @@ import { X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useCreateUser } from '../api/users.api';
+import { useCreateUser, useUpdateUser } from '../api/users.api';
 import { useTenants } from '../api/tenants.api';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import type { User } from '../types/user.types';
 
-const createUserSchema = z.object({
+const userSchema = z.object({
     firstName: z.string().min(1, 'First name is required'),
     lastName: z.string().min(1, 'Last name is required'),
     email: z.string().email('Invalid email address'),
-    password: z.string().min(8, 'Password must be at least 8 characters'),
+    password: z.string().min(8, 'Password must be at least 8 characters').optional().or(z.literal('')),
     role: z.enum(['admin', 'manager', 'customer']),
     tenantId: z.number().optional(),
 });
 
-type CreateUserFormData = z.infer<typeof createUserSchema>;
+type UserFormData = z.infer<typeof userSchema>;
 
-interface CreateUserFormProps {
+interface UserFormProps {
     onClose: () => void;
+    userToEdit?: User | null;
 }
 
-const CreateUserForm = ({ onClose }: CreateUserFormProps) => {
-    const { mutate: createUser, isPending } = useCreateUser();
+const UserForm = ({ onClose, userToEdit }: UserFormProps) => {
+    const isEditMode = !!userToEdit;
+    const { mutate: createUser, isPending: isCreating } = useCreateUser();
+    const { mutate: updateUser, isPending: isUpdating } = useUpdateUser();
     const { data: tenants } = useTenants();
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -32,34 +36,74 @@ const CreateUserForm = ({ onClose }: CreateUserFormProps) => {
         handleSubmit,
         formState: { errors },
         reset,
-    } = useForm<CreateUserFormData>({
-        resolver: zodResolver(createUserSchema),
+        setValue,
+    } = useForm<UserFormData>({
+        resolver: zodResolver(userSchema),
+        defaultValues: {
+            firstName: userToEdit?.firstName || '',
+            lastName: userToEdit?.lastName || '',
+            email: userToEdit?.email || '',
+            role: userToEdit?.role || 'customer',
+            tenantId: userToEdit?.tenant?.id || undefined,
+            password: '',
+        }
     });
 
-    const onSubmit = (data: CreateUserFormData) => {
+    useEffect(() => {
+        if (userToEdit) {
+            setValue('firstName', userToEdit.firstName);
+            setValue('lastName', userToEdit.lastName);
+            setValue('email', userToEdit.email);
+            setValue('role', userToEdit.role);
+            setValue('tenantId', userToEdit.tenant?.id || undefined);
+        }
+    }, [userToEdit, setValue]);
+
+    const onSubmit = (data: UserFormData) => {
         setSuccessMessage('');
         setErrorMessage('');
 
-        createUser(data, {
-            onSuccess: () => {
-                setSuccessMessage('User created successfully!');
-                reset();
-                setTimeout(() => {
-                    onClose();
-                }, 1500);
-            },
-            onError: (error: any) => {
-                setErrorMessage(
-                    error.response?.data?.message || 'Failed to create user. Please try again.'
-                );
-            },
-        });
+        if (isEditMode && userToEdit) {
+            const updateData: any = { ...data };
+            if (!updateData.password) delete updateData.password;
+
+            updateUser({ id: userToEdit.id, data: updateData }, {
+                onSuccess: () => {
+                    setSuccessMessage('User updated successfully!');
+                    setTimeout(() => {
+                        onClose();
+                    }, 1500);
+                },
+                onError: (error: any) => {
+                    setErrorMessage(
+                        error.response?.data?.message || 'Failed to update user. Please try again.'
+                    );
+                },
+            });
+        } else {
+            createUser(data as any, {
+                onSuccess: () => {
+                    setSuccessMessage('User created successfully!');
+                    reset();
+                    setTimeout(() => {
+                        onClose();
+                    }, 1500);
+                },
+                onError: (error: any) => {
+                    setErrorMessage(
+                        error.response?.data?.message || 'Failed to create user. Please try again.'
+                    );
+                },
+            });
+        }
     };
 
     return (
         <div className="bg-white rounded-xl border border-gray-100 shadow-2xl p-6 animate-in fade-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold text-gray-800">Create New User</h2>
+                <h2 className="text-xl font-bold text-gray-800">
+                    {isEditMode ? 'Edit User' : 'Create New User'}
+                </h2>
                 <button
                     onClick={onClose}
                     className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -131,7 +175,7 @@ const CreateUserForm = ({ onClose }: CreateUserFormProps) => {
 
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Password
+                        Password {isEditMode && '(Leave empty to keep current)'}
                     </label>
                     <input
                         {...register('password')}
@@ -187,10 +231,10 @@ const CreateUserForm = ({ onClose }: CreateUserFormProps) => {
                 <div className="flex gap-3 pt-4">
                     <button
                         type="submit"
-                        disabled={isPending}
+                        disabled={isCreating || isUpdating}
                         className="flex-1 bg-[#ff5a3d] hover:bg-[#e54e35] disabled:bg-gray-300 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors"
                     >
-                        {isPending ? 'Creating...' : 'Create User'}
+                        {isCreating || isUpdating ? (isEditMode ? 'Updating...' : 'Creating...') : (isEditMode ? 'Update User' : 'Create User')}
                     </button>
                     <button
                         type="button"
@@ -205,4 +249,4 @@ const CreateUserForm = ({ onClose }: CreateUserFormProps) => {
     );
 };
 
-export default CreateUserForm;
+export default UserForm;

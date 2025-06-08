@@ -19,6 +19,11 @@ export const createUser = async (data: CreateUserRequest): Promise<{ id: number 
     return res.data;
 };
 
+export const updateUser = async ({ id, data }: { id: number; data: Partial<CreateUserRequest> }): Promise<{ id: number }> => {
+    const res = await client.patch(`/users/${id}`, data);
+    return res.data;
+};
+
 // React Query Hooks
 export const useUsers = (filters: UserFilters) => {
     return useQuery({
@@ -32,6 +37,17 @@ export const useCreateUser = () => {
 
     return useMutation({
         mutationFn: createUser,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["users"] });
+        },
+    });
+};
+
+export const useUpdateUser = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: updateUser,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["users"] });
         },

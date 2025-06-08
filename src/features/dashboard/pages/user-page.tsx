@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useUsers } from '../api/users.api';
-import CreateUserForm from '../components/create-user-form';
+import UserForm from '../components/user-form';
 import Modal from '../components/modal';
 import FilterBar from '../components/filter-bar';
 import UserTable from '../components/user-table';
+import type { User } from '../types/user.types';
 
 const UsersPage = () => {
-    const [showCreateForm, setShowCreateForm] = useState(false);
+    const [showForm, setShowForm] = useState(false);
+    const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [debouncedSearch, setDebouncedSearch] = useState('');
     const [selectedRole, setSelectedRole] = useState('');
@@ -36,6 +38,16 @@ const UsersPage = () => {
         setCurrentPage(1); // Reset to first page on filter change
     };
 
+    const handleEditUser = (user: User) => {
+        setSelectedUser(user);
+        setShowForm(true);
+    };
+
+    const handleCloseForm = () => {
+        setShowForm(false);
+        setSelectedUser(null);
+    };
+
     const totalPages = data ? Math.ceil(data.total / data.perPage) : 0;
 
     return (
@@ -47,9 +59,12 @@ const UsersPage = () => {
                 <span className="text-gray-600">Users</span>
             </nav>
 
-            {/* Create User Form Modal */}
-            <Modal isOpen={showCreateForm} onClose={() => setShowCreateForm(false)}>
-                <CreateUserForm onClose={() => setShowCreateForm(false)} />
+            {/* User Form Modal (Create/Edit) */}
+            <Modal isOpen={showForm} onClose={handleCloseForm}>
+                <UserForm
+                    onClose={handleCloseForm}
+                    userToEdit={selectedUser}
+                />
             </Modal>
 
             {/* Filter Bar */}
@@ -58,7 +73,10 @@ const UsersPage = () => {
                 selectedRole={selectedRole}
                 onSearchChange={setSearchTerm}
                 onRoleChange={handleRoleChange}
-                onCreateClick={() => setShowCreateForm(true)}
+                onCreateClick={() => {
+                    setSelectedUser(null);
+                    setShowForm(true);
+                }}
             />
 
             {/* Data Table */}
@@ -71,6 +89,7 @@ const UsersPage = () => {
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={setCurrentPage}
+                    onEditUser={handleEditUser}
                 />
             </div>
         </div>

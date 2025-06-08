@@ -10,6 +10,7 @@ interface UserTableProps {
     currentPage: number;
     totalPages: number;
     onPageChange: (page: number) => void;
+    onEditUser: (user: User) => void;
 }
 
 const UserTable = ({
@@ -20,6 +21,7 @@ const UserTable = ({
     currentPage,
     totalPages,
     onPageChange,
+    onEditUser,
 }: UserTableProps) => {
     if (isLoading) {
         return (
@@ -57,11 +59,12 @@ const UserTable = ({
                         <th className="px-6 py-4">Role</th>
                         <th className="px-6 py-4">Email</th>
                         <th className="px-6 py-4">Tenant</th>
+                        <th className="px-6 py-4">Actions</th>
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
                     {users.map((user) => (
-                        <UserRow key={user.id} user={user} />
+                        <UserRow key={user.id} user={user} onEdit={() => onEditUser(user)} />
                     ))}
                 </tbody>
             </table>
