@@ -6,6 +6,7 @@ import ProtectedRoute from "@/features/auth/components/protected-route";
 import AdminDashboard from "@/features/dashboard/pages/dashboard-page";
 import { HomePage } from "@/features/dashboard/pages/home-page";
 import UsersPage from "@/features/dashboard/pages/user-page";
+import RestaurantsPage from "@/features/dashboard/pages/restaurants-page";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,14 @@ const router = createBrowserRouter([
             element: (
               <ProtectedRoute allowedRoles={["admin"]}>
                 <UsersPage />
+              </ProtectedRoute>
+            )
+          },
+          {
+            path: "restaurants",
+            element: (
+              <ProtectedRoute allowedRoles={["admin"]}>
+                <RestaurantsPage />
               </ProtectedRoute>
             )
           },

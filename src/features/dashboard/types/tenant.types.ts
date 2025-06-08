@@ -12,3 +12,14 @@ export interface TenantsResponse {
     total: number;
     data: Tenant[];
 }
+
+export interface CreateTenantRequest {
+    name: string;
+    address: string;
+}
+
+export interface TenantFilters {
+    q?: string;
+    currentPage?: number;
+    perPage?: number;
+}
