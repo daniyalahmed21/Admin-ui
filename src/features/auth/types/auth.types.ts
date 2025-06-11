@@ -18,10 +18,8 @@ export interface UserResponse{
 
 export interface AuthState {
   user: UserResponse | null;
-  isAuthReady: boolean;
   setUser: (user: UserResponse | null) => void;
   clearUser: () => void;
-  setAuthReady: (ready: boolean) => void;
 }
 
 

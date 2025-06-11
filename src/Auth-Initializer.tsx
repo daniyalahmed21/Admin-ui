@@ -5,40 +5,30 @@ import { useGetUserData } from "@/features/auth/hooks/use-login";
 import Loader from "@/shared/components/loader";
 
 const AuthInitializer = () => {
+  const { data, isLoading } = useGetUserData();
+  const { user, setUser, clearUser } = useAuthStore();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { data, isLoading, isError } = useGetUserData();
-  const { user, setUser, clearUser, setAuthReady } = useAuthStore();
-
   useEffect(() => {
     if (isLoading) return;
-
-    if (data) {
-      setUser(data);
-    } else if (isError) {
-      clearUser();
-    }
-
-    setAuthReady(true); 
-  }, [data, isError, isLoading, setUser, clearUser, setAuthReady]);
+    if (data) setUser(data);
+    else clearUser();
+  }, [data, isLoading, setUser, clearUser]);
 
   useEffect(() => {
     if (!user) return;
-
     if (location.pathname === "/" || location.pathname === "/login") {
-      navigate(
-        user.role === "customer"
-          ? "/customer-dashboard"
-          : "/dashboard",
-        { replace: true }
-      );
+      navigate(user.role === "customer" ? "/customer-dashboard" : "/dashboard", {
+        replace: true,
+      });
     }
-  }, [user, location.pathname, navigate]);
+  }, [user, navigate, location.pathname]);
 
-  if (!useAuthStore.getState().isAuthReady) {
-    return <Loader />;
-  }
+  const isFetched = !isLoading;
+  const isSynced = isFetched && (!!data === !!user);
+
+  if (!isSynced) return <Loader />;
 
   return <Outlet />;
 };
