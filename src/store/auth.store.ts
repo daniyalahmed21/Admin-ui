@@ -1,13 +1,25 @@
-import type { AuthStore, UserResponse } from '@/features/auth/types/auth.types'
-import { create } from 'zustand'
-import { devtools } from 'zustand/middleware'
+import { create } from "zustand";
+import { devtools } from "zustand/middleware";
+import type { AuthState } from "@/features/auth/types/auth.types";
 
-const useAuthStore = create<AuthStore>()(devtools((set) => ({
-    user: null,
-    setUser: (user: UserResponse | null) => set({ user }),
-    clearUser: () => set({ user: null }),
-}), {
-    name: "auth-store",
-}))
+const useAuthStore = create<AuthState>()(
+  devtools(
+    (set) => ({
+      user: null,
+      isAuthReady: false,
 
-export default useAuthStore
+      setUser: (user) => set({ user }),
+
+      clearUser: () =>
+        set({
+          user: null,
+          isAuthReady: true,
+        }),
+
+      setAuthReady: (ready) => set({ isAuthReady: ready }),
+    }),
+    { name: "auth-store" }
+  )
+);
+
+export default useAuthStore;

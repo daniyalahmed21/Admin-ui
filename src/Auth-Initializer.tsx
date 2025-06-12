@@ -1,32 +1,44 @@
 import { useEffect } from "react";
-import { Outlet, useNavigate } from "react-router";
+import { Outlet, useNavigate, useLocation } from "react-router";
 import useAuthStore from "@/store/auth.store";
 import { useGetUserData } from "@/features/auth/hooks/use-login";
-import Loader from "./shared/components/loader";
+import Loader from "@/shared/components/loader";
 
 const AuthInitializer = () => {
   const navigate = useNavigate();
-  const { user, setUser } = useAuthStore();
-  const { isLoading, data } = useGetUserData();
+  const location = useLocation();
+
+  const { data, isLoading, isError } = useGetUserData();
+  const { user, setUser, clearUser, setAuthReady } = useAuthStore();
 
   useEffect(() => {
-    if (data && !user) {
+    if (isLoading) return;
+
+    if (data) {
       setUser(data);
+    } else if (isError) {
+      clearUser();
     }
-  }, [data, user, setUser]);
+
+    setAuthReady(true); 
+  }, [data, isError, isLoading, setUser, clearUser, setAuthReady]);
 
   useEffect(() => {
     if (!user) return;
 
-    // Only redirect if on login or root to avoid interrupting current page on refresh
-    const currentPath = window.location.pathname;
-    if (currentPath === "/" || currentPath === "/login") {
-      if (user.role === "customer") navigate("/customer-dashboard", { replace: true });
-      else navigate("/dashboard", { replace: true });
+    if (location.pathname === "/" || location.pathname === "/login") {
+      navigate(
+        user.role === "customer"
+          ? "/customer-dashboard"
+          : "/dashboard",
+        { replace: true }
+      );
     }
-  }, [user, navigate]);
+  }, [user, location.pathname, navigate]);
 
-  if (isLoading) return <Loader />;
+  if (!useAuthStore.getState().isAuthReady) {
+    return <Loader />;
+  }
 
   return <Outlet />;
 };

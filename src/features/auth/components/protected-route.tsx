@@ -1,8 +1,6 @@
 import { Navigate } from "react-router";
 import useAuthStore from "@/store/auth.store";
-import { useGetUserData } from "@/features/auth/hooks/use-login";
 import type { ReactNode } from "react";
-import Loader from "@/shared/components/loader";
 
 interface ProtectedRouteProps {
   allowedRoles: string[];
@@ -10,16 +8,13 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({ allowedRoles, children }: ProtectedRouteProps) => {
-  const { user } = useAuthStore();
-  const { isLoading, data } = useGetUserData();
+  const { user, isAuthReady } = useAuthStore();
 
-  if (isLoading) return <Loader />;
+  if (!isAuthReady) return null;
 
-  const currentUser = user || data;
+  if (!user) return <Navigate to="/login" replace />;
 
-  if (!currentUser) return <Navigate to="/login" replace />;
-
-  if (!allowedRoles.includes(currentUser.role))
+  if (!allowedRoles.includes(user.role))
     return <Navigate to="/unauthorized" replace />;
 
   return <>{children}</>;
