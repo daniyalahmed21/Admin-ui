@@ -1,11 +1,8 @@
 import { LockKeyhole } from "lucide-react";
-import { useNavigate } from "react-router";
-
 import Logo from "@/shared/components/logo";
 import LoginForm from "@/features/auth/components/login-form";
 
 const LoginPage = () => {
-  const navigate = useNavigate();
 
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col">
@@ -20,7 +17,7 @@ const LoginPage = () => {
           </div>
 
           <div className="p-8">
-            <LoginForm onSuccess={() => navigate("/dashboard")} />
+            <LoginForm />
           </div>
         </div>
       </div>
