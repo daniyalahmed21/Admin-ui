@@ -10,3 +10,7 @@ export const self = async (): Promise<UserResponse> => {
   const res = await axios.get("/auth/self");
   return res.data;
 };
+
+export const logout = async (): Promise<void> => {
+  await axios.post("/auth/logout");
+};
