@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { useGetUserData } from "./src/features/auth/hooks/use-login";
-import useAuthStore from "./src/store/auth.store";
+import { useGetUserData } from "./features/auth/hooks/use-login";
+import useAuthStore from "./store/auth.store";
 
 const AuthInitializer = ({ children }: { children: React.ReactNode }) => {
     const { data, isError } = useGetUserData();

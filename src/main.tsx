@@ -7,7 +7,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
-import AuthInitializer from "../AuthInitializer";
+import AuthInitializer from "./AuthInitializer";
 
 const queryClient = new QueryClient()
 
