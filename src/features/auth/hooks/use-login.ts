@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { login, self } from "@/features/auth/api/auth.api";
-import type { UserResponse } from "../types/auth.types";
 import { useEffect } from "react";
 
 export const useLogin = () =>
@@ -9,13 +8,14 @@ export const useLogin = () =>
 });
 
 export const useGetUserData = (isLoggedIn: boolean) => {
-  const query = useQuery<UserResponse, Error>({
+  const query = useQuery({
     queryKey: ["user-data"],
     queryFn: self,
     enabled: isLoggedIn,
   });
 
   useEffect(() => {
+    console.log(query.data)
     if (query.data) {
       localStorage.setItem("user", JSON.stringify(query.data));
     }
