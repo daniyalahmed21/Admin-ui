@@ -5,7 +5,7 @@ const Logo = () => {
             <div className="w-8 h-8 rounded-full border-[6px] border-red-500 flex items-center justify-center">
                 <div className="w-3 h-3 bg-red-500 rounded-full" />
             </div>
-            <span className="font-black text-2xl text-gray-800">PIZZA</span>
+            <span className="font-black text-2xl ">PIZZA</span>
         </div>
     )
 }
