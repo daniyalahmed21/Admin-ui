@@ -2,9 +2,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Lock, User } from "lucide-react";
-
-import { loginSchema, type LoginFormData } from "../schemas/login.schema";
-import { useLogin } from "../hooks/use-login";
+import { loginSchema, type LoginFormData } from "@/features/auth/schemas/login.schema";
+import { useLogin } from "@/features/auth/hooks/use-login";
 
 interface LoginFormProps {
     onSuccess?: () => void;

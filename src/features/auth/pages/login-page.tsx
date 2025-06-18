@@ -1,8 +1,8 @@
 import { LockKeyhole } from "lucide-react";
 import { useNavigate } from "react-router";
 
-import LoginForm from "../components/login-form";
-import Logo from "../../../shared/components/logo";
+import Logo from "@/shared/components/logo";
+import LoginForm from "@/features/auth/components/login-form";
 
 const LoginPage = () => {
   const navigate = useNavigate();
