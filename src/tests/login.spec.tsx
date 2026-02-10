@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import LoginPage from "./login";
+import LoginPage from "../features/auth/pages/login-page";
 import { describe, expect, it } from "vitest";
 
 describe("Login", () => {
@@ -11,5 +11,5 @@ describe("Login", () => {
         expect(screen.getByRole("button", { name: "Login" })).toBeInTheDocument();
         expect(screen.getByRole("checkbox", { name: "Remember me" })).toBeInTheDocument();
         expect(screen.getByRole("link", { name: "Forgot password ?" })).toBeInTheDocument();
-    }); 
+    });
 });
