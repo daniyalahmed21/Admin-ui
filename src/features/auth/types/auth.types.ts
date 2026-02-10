@@ -8,17 +8,10 @@ export interface LoginResponse {
   id: number;
 }
 
-export interface AuthError {
-  statusCode: number;
-  message: string;
-}
-
-export interface AuthUser {
+export interface UserResponse{
   id: number;
+  firstName: string;
+  lastName: string;
   email: string;
-}
-
-export interface AuthState {
-  user: AuthUser | null;
-  isAuthenticated: boolean;
+  role: string;
 }
