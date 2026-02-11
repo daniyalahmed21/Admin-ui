@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Lock, User, Loader2 } from "lucide-react";
 import { loginSchema, type LoginFormData } from "@/features/auth/schemas/login.schema";
-import { useGetUserData, useLogin } from "@/features/auth/hooks/use-login";
+import { useLogin } from "@/features/auth/hooks/use-login";
 
 interface LoginFormProps {
     onSuccess?: () => void;
@@ -11,7 +11,6 @@ interface LoginFormProps {
 
 const LoginForm = ({ onSuccess }: LoginFormProps) => {
     const [showPassword, setShowPassword] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const {
         register,
@@ -21,16 +20,12 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
         resolver: zodResolver(loginSchema),
     });
 
-
-    const { mutate, isPending, isError } = useLogin();
-
-    const { data } = useGetUserData(isLoggedIn);
+    const { mutate, isPending, isError:isLoginError } = useLogin();
 
     const onSubmit = (data: LoginFormData) => {
         mutate(data, {
             onSuccess: () => {
                 onSuccess?.();
-                setIsLoggedIn(true);
             },
         });
     };
@@ -105,7 +100,7 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
             </div>
 
             {/* API Error Message */}
-            {isError && (
+            {isLoginError  && (
                 <div className="bg-red-50 border border-red-100 p-3 rounded-lg">
                     <p className="text-xs text-red-600 text-center font-medium">
                         Invalid email or password. Please try again.

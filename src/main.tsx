@@ -7,13 +7,16 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
+import AuthInitializer from "../AuthInitializer";
 
 const queryClient = new QueryClient()
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <AuthInitializer>
+        <RouterProvider router={router} />
+      </AuthInitializer>
     </QueryClientProvider>
   </StrictMode>,
 );

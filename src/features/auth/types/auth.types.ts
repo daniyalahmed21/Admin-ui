@@ -15,3 +15,9 @@ export interface UserResponse{
   email: string;
   role: string;
 }
+
+export interface AuthStore {
+  user: UserResponse | null;
+  setUser: (user: UserResponse | null) => void;
+  clearUser: () => void;
+}

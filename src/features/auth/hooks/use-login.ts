@@ -1,25 +1,21 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { login, self } from "@/features/auth/api/auth.api";
-import { useEffect } from "react";
 
-export const useLogin = () =>
-  useMutation({
+export const useLogin = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
     mutationFn: login,
-});
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user-data"] });
+    },
+  });
+};
 
-export const useGetUserData = (isLoggedIn: boolean) => {
-  const query = useQuery({
+export const useGetUserData = () => {
+  return useQuery({
     queryKey: ["user-data"],
     queryFn: self,
-    enabled: isLoggedIn,
+    retry: false,
   });
-
-  useEffect(() => {
-    console.log(query.data)
-    if (query.data) {
-      localStorage.setItem("user", JSON.stringify(query.data));
-    }
-  }, [query.data]);
-
-  return query;
 };
+
