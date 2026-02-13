@@ -4,6 +4,7 @@ import Login from "@/features/auth/pages/login-page";
 import Unauthorized from "@/features/auth/pages/unauthorized";
 import ProtectedRoute from "@/features/auth/components/protected-route";
 import AdminDashboard from "@/features/dashboard/pages/dashboard-page";
+import { HomePage } from "@/features/dashboard/pages/home-page";
 
 const router = createBrowserRouter([
   {
@@ -20,7 +21,7 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
         children: [
-          // { index: true, element: <Home /> }, 
+          { index: true, element: <HomePage /> },
           // { path: "users", element: <UsersPage /> }, 
           // { path: "orders", element: <OrdersPage /> },
         ]
