@@ -33,7 +33,7 @@ const LoginForm = () => {
                     <input
                         {...register("email")}
                         type="email"
-                        value="john.doe@example.com"
+                        value="admin@pizza.com"
                         placeholder="name@company.com"
                         autoComplete="username"
                         className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl
@@ -55,7 +55,7 @@ const LoginForm = () => {
                     </div>
                     <input
                         {...register("password")}
-                        value="plainPassword"
+                        value="hashed_password_here"
                         type={showPassword ? "text" : "password"}
                         placeholder="••••••••"
                         autoComplete="current-password"

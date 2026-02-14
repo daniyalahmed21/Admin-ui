@@ -1,8 +1,10 @@
 import { Bell, ChevronDown, MapPin, LogOut } from 'lucide-react';
 import { useLogout } from '@/features/auth/hooks/use-logout';
 import { useState } from 'react';
+import useAuthStore from '@/store/auth.store';
 
-const Header = ({ location = "Global" }: { location?: string }) => {
+const Header = () => {
+    const { user } = useAuthStore();
     const { mutate: logout, isPending } = useLogout();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -13,7 +15,7 @@ const Header = ({ location = "Global" }: { location?: string }) => {
             <div className="bg-orange-50 px-4 py-2 rounded-full flex items-center gap-2">
                 <MapPin size={20} className="text-[#ff5a3d]" />
                 <span className="text-[#ff5a3d] text-sm font-semibold">
-                    {location}
+                    {user?.role === "admin" ? "Global" : user?.role}
                 </span>
             </div>
 
@@ -31,7 +33,7 @@ const Header = ({ location = "Global" }: { location?: string }) => {
                     >
                         <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-200">
                             <img
-                                src="https://avatar.iran.liara.run/public/30"
+                                src={"/public/images.png"}
                                 alt="User profile"
                                 className="w-full h-full object-cover"
                             />

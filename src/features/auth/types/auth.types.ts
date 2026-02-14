@@ -8,12 +8,13 @@ export interface LoginResponse {
   id: number;
 }
 
-export interface UserResponse{
+export interface UserResponse {
   id: number;
   firstName: string;
   lastName: string;
   email: string;
   role: "admin" | "manager" | "customer";
+  tenant: string | null;
 }
 
 export interface AuthState {
