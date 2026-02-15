@@ -17,7 +17,7 @@ export const useGetUserData = () => {
     queryKey: ["user-data"],
     queryFn: self,
     retry: false,
-    refetchOnWindowFocus: false,
+    staleTime: 5 * 60 * 1000,
   });
 };
 

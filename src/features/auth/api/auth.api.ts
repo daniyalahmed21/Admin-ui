@@ -29,20 +29,19 @@ client.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     if (
-     error.response?.status === 401 &&
-      originalRequest.url !== "/auth/refresh"
+      error.response?.status === 401 &&
+      originalRequest.url !== "/auth/refresh" &&
+      originalRequest.url !== "/auth/logout"
     ) {
       try {
         const headers = originalRequest.headers;
         await refresh();
         return client.request({ ...originalRequest, headers, withCredentials: true });
       } catch (refreshError) {
-        await logout();
-        window.location.href = "/login";
         useAuthStore.getState().clearUser();
         return Promise.reject(refreshError);
       }
     }
     return Promise.reject(error);
-  } 
+  }
 );
