@@ -1,6 +1,6 @@
 import { Outlet } from "react-router";
 import Sidebar from "../components/sidebar";
-import { BarChart2, Gift, HelpCircle, Home, Menu, Package, Settings, ShoppingBag, Users } from "lucide-react";
+import { BarChart2, Gift, HelpCircle, Home, Package, Settings, ShoppingBag, Users } from "lucide-react";
 import Header from "../components/header";
 
 export const MENU_ITEMS = [
