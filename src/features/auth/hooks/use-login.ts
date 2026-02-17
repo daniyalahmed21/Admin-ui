@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { login, self } from "@/features/auth/api/auth.api";
-import useAuthStore from "@/store/auth.store";
 
 export const useLogin = () => {
   const queryClient = useQueryClient();

@@ -1,8 +1,34 @@
+import { Outlet } from "react-router";
+import Sidebar from "../components/sidebar";
+import { BarChart2, Gift, HelpCircle, Home, Menu, Package, Settings, ShoppingBag, Users } from "lucide-react";
+import Header from "../components/header";
 
-const DashboardPage = () => {
+export const MENU_ITEMS = [
+  { label: 'Home', icon: Home, path: '/' },
+  { label: 'Orders', icon: ShoppingBag, path: '/orders' },
+  { label: 'Products', icon: Package, path: '/products' },
+  { label: 'Users', icon: Users, path: '/users' },
+  { label: 'Sales', icon: BarChart2, path: '/sales' },
+  { label: 'Promo', icon: Gift, path: '/promo' },
+];
+
+export const BOTTOM_ITEMS = [
+  { label: 'Settings', icon: Settings, path: '/settings' },
+  { label: 'Help', icon: HelpCircle, path: '/help' },
+];
+
+const AdminDashboard = () => {
   return (
-    <div>DashboardPage</div>
-  )
-}
+    <div className="flex min-h-screen bg-gray-50">
+      <Sidebar topItems={MENU_ITEMS} bottomItems={BOTTOM_ITEMS} />
+      <div className="flex-1">
+        <Header />
+        <main className="p-8">
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  );
+};
 
-export default DashboardPage
+export default AdminDashboard;

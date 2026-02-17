@@ -1,9 +1,9 @@
 import { createBrowserRouter } from "react-router";
 import AuthInitializer from "@/Auth-Initializer";
-import Dashboard from "@/features/dashboard/pages/dashboard-page";
 import Login from "@/features/auth/pages/login-page";
 import Unauthorized from "@/features/auth/pages/unauthorized";
 import ProtectedRoute from "@/features/auth/components/protected-route";
+import AdminDashboard from "@/features/dashboard/pages/dashboard-page";
 
 const router = createBrowserRouter([
   {
@@ -16,15 +16,20 @@ const router = createBrowserRouter([
         path: "dashboard",
         element: (
           <ProtectedRoute allowedRoles={["admin", "manager"]}>
-            <Dashboard />
+            <AdminDashboard />
           </ProtectedRoute>
         ),
+        children: [
+          // { index: true, element: <Home /> }, 
+          // { path: "users", element: <UsersPage /> }, 
+          // { path: "orders", element: <OrdersPage /> },
+        ]
       },
       {
         path: "customer-dashboard",
         element: (
           <ProtectedRoute allowedRoles={["customer"]}>
-            <Dashboard />
+            <AdminDashboard />
           </ProtectedRoute>
         ),
       },
