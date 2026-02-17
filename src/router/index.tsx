@@ -23,7 +23,14 @@ const router = createBrowserRouter([
         ),
         children: [
           { index: true, element: <HomePage /> },
-          { path: "users", element: <UsersPage /> }, 
+          {
+            path: "users",
+            element: (
+              <ProtectedRoute allowedRoles={["admin"]}>
+                <UsersPage />
+              </ProtectedRoute>
+            )
+          },
           // { path: "orders", element: <OrdersPage /> },
         ]
       },
