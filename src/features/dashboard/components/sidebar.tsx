@@ -1,42 +1,5 @@
-import { NavLink } from 'react-router';
 import Logo from '@/shared/components/logo';
-import type { LucideIcon } from 'lucide-react';
-
-interface NavItemProps {
-  item: {
-    label: string;
-    icon: LucideIcon;
-    path: string;
-  };
-}
-
-const NavItem = ({ item }: NavItemProps) => {
-  const { icon: Icon, label, path } = item;
-
-  return (
-    <NavLink
-      to={path}
-      className={({ isActive }) => `
-        w-full flex items-center px-6 py-3 text-sm transition-all duration-200 border-l-4 group
-        ${isActive 
-          ? 'text-[#ff5a3d] bg-orange-50 border-[#ff5a3d] font-bold' 
-          : 'text-gray-500 border-transparent hover:text-[#ff5a3d] hover:bg-orange-50 font-medium'
-        }
-      `}
-    >
-      {({ isActive }) => (
-        <>
-          <Icon 
-            size={20} 
-            strokeWidth={isActive ? 2.5 : 2} 
-            className="mr-3 shrink-0 transition-transform group-hover:scale-110" 
-          />
-          <span>{label}</span>
-        </>
-      )}
-    </NavLink>
-  );
-};
+import NavItem from './nav-item';
 
 interface SidebarProps {
   topItems: any[];

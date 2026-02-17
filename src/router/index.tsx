@@ -5,6 +5,7 @@ import Unauthorized from "@/features/auth/pages/unauthorized";
 import ProtectedRoute from "@/features/auth/components/protected-route";
 import AdminDashboard from "@/features/dashboard/pages/dashboard-page";
 import { HomePage } from "@/features/dashboard/pages/home-page";
+import UsersPage from "@/features/dashboard/pages/user-page";
 
 const router = createBrowserRouter([
   {
@@ -22,7 +23,7 @@ const router = createBrowserRouter([
         ),
         children: [
           { index: true, element: <HomePage /> },
-          // { path: "users", element: <UsersPage /> }, 
+          { path: "users", element: <UsersPage /> }, 
           // { path: "orders", element: <OrdersPage /> },
         ]
       },
