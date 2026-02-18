@@ -36,8 +36,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
                         key={pageNum}
                         onClick={() => onPageChange(pageNum)}
                         className={`w-8 h-8 flex items-center justify-center border rounded-lg text-sm font-bold ${currentPage === pageNum
-                                ? 'border-[#ff5a3d] text-[#ff5a3d]'
-                                : 'border-gray-200 text-gray-400 hover:bg-gray-50'
+                                ? "border-[#ff5a3d] text-[#ff5a3d]"
+                                : "border-gray-200 text-gray-400 hover:bg-gray-50"
                             }`}
                     >
                         {pageNum}

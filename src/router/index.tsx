@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router";
-import AuthInitializer from "@/Auth-Initializer";
+import AuthInitializer from "@/features/auth/components/auth-initializer";
 import Login from "@/features/auth/pages/login-page";
 import Unauthorized from "@/features/auth/pages/unauthorized";
 import ProtectedRoute from "@/features/auth/components/protected-route";
@@ -31,7 +31,6 @@ const router = createBrowserRouter([
               </ProtectedRoute>
             )
           },
-          // { path: "orders", element: <OrdersPage /> },
         ]
       },
       {
